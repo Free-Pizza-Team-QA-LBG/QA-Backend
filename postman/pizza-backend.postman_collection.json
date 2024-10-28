@@ -5,7 +5,7 @@
 	},
 	"item": [
 		{
-			"name": "http://localhost:8080/api/v1/heartbeat",
+			"name": "Heartbeat",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -32,6 +32,40 @@
 						"api",
 						"v1",
 						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All employees",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee",
+						"all"
 					]
 				}
 			},
