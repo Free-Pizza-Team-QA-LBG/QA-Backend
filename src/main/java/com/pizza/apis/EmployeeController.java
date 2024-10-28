@@ -1,8 +1,13 @@
 package com.pizza.apis;
 
 
+import com.pizza.entities.Employee;
+import com.pizza.services.EmployeeService;
 import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Iterator;
@@ -11,10 +16,21 @@ import java.util.Iterator;
 @RequestMapping("/api/v1/employee")
 class EmployeeController {
 
+    @Autowired
+    private EmployeeService employeeService;
+
     @GetMapping("/{id}")
     public String greetEmployee(@PathVariable int id) {
         System.out.printf("SOMETHING HAPPENED to %d\n", id);
         return "Hello Employee " + id;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<String> getAllEmployees() {
+        return new ResponseEntity<>(
+                employeeService.getEmployees()
+                ,
+                HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -28,5 +44,6 @@ class EmployeeController {
         return body.toString();
 
     }
+
 
 }
