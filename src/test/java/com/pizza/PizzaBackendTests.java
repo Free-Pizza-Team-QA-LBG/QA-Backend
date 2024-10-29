@@ -3,8 +3,7 @@ package com.pizza;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-
+import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.Assert.assertTrue;
 
 //@SpringBootTest
@@ -19,13 +18,8 @@ class PizzaBackendTests {
 
 
     @Test
-    void alwaysTrue(){
-       assertTrue(true);
+    void alwaysTrue() {
+        assertTrue(true);
     }
-
-
-
-
-
-
 }
+
