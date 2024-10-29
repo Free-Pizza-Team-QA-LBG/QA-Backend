@@ -35,15 +35,23 @@ public class EmployeeService {
 //                ) + "}"
 //        ));
 
+        JSONArray employeesArray = new JSONArray();
+        employeeRepo.findAll().forEach(employee -> {
+            JSONObject employeeJson = new JSONObject();
+            employeeJson.put("id", employee.getId());
+            employeeJson.put("firstName", employee.getFirstName());
+            employeeJson.put("lastName", employee.getLastLame());
+            employeeJson.put("email", employee.getEmail());
+            employeeJson.put("department", employee.getDepartment());
+            employeeJson.put("salary", employee.getSalary());
 
-        return new JSONObject("{\"employees\":" +
-                new JSONArray(
-                        Stream.of(employeeRepo.findAll().toArray())
-                                .map(Objects::toString)
-                                .toArray()
-                ) + "}"
-        ).toString();
+            employeesArray.put(employeeJson);
+        });
 
+        JSONObject jsonResult = new JSONObject();
+        jsonResult.put("employees", employeesArray);
+
+        return jsonResult.toString();
     }
 
 }
