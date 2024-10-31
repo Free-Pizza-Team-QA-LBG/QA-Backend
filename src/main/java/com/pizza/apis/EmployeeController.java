@@ -45,6 +45,12 @@ class EmployeeController {
 
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<String> addEmployee(@RequestBody Employee employee) {
+        Employee createdEmployee = employeeService.addEmployee(employee);
+        return ResponseEntity.ok("Added emplopyee");
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable int id, @RequestBody Employee updatedUser) {
         try {

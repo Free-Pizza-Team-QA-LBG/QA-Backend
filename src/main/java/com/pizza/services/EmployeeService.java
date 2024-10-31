@@ -71,10 +71,14 @@ public class EmployeeService {
             employee.setEmail(updatedEmployee.getEmail());
             employee.setDepartment(updatedEmployee.getDepartment());
             employee.setSalary(updatedEmployee.getSalary());
-            return employeeRepo.save(employee); // save() updates the entity
+            return employeeRepo.save(employee);
         } else {
             throw new RuntimeException("User not found with ID: " + employeeId);
         }
+    }
+
+    public Employee addEmployee(Employee employee) {
+        return employeeRepo.save(employee);
     }
 
 }
