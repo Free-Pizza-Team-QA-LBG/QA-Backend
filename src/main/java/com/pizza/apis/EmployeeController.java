@@ -45,5 +45,16 @@ class EmployeeController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable int id) {
+        try {
+            employeeService.deleteUserById(id);
+            return new ResponseEntity<>("Employee deleted",
+                    HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
 
 }

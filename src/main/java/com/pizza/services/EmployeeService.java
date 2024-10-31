@@ -51,4 +51,12 @@ public class EmployeeService {
         return jsonResult.toString();
     }
 
+    public void deleteUserById(int userId) {
+        if (employeeRepo.existsById(userId)) {
+            employeeRepo.deleteById(userId);
+        } else {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+    }
+
 }
