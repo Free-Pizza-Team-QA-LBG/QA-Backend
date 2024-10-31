@@ -53,6 +53,18 @@ public class Employee {
         return salary;
     }
 
+    public void setId(int id) {this.id = id;}
+
+    public void setFirstName(String firstName) {this.firstName = firstName;}
+
+    public void setLastName(String lastName) {this.lastName = lastName;}
+
+    public void setEmail(String email) {this.email = email;}
+
+    public void setDepartment(String department) {this.department = department;}
+
+    public void setSalary(BigDecimal salary) {this.salary = salary;}
+
     @Override
     public String toString() {
         return String.format("{" +

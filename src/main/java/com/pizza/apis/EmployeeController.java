@@ -45,6 +45,16 @@ class EmployeeController {
 
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateEmployee(@PathVariable int id, @RequestBody Employee updatedUser) {
+        try {
+            Employee user = employeeService.updateEmployee(id, updatedUser);
+            return ResponseEntity.ok("User updated");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(null);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) {
         try {

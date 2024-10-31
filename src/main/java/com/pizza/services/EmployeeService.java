@@ -1,10 +1,13 @@
 package com.pizza.services;
 
+import com.pizza.entities.Employee;
 import com.pizza.repos.EmployeeRepo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -51,11 +54,26 @@ public class EmployeeService {
         return jsonResult.toString();
     }
 
-    public void deleteUserById(int userId) {
-        if (employeeRepo.existsById(userId)) {
-            employeeRepo.deleteById(userId);
+    public void deleteUserById(int employeeId) {
+        if (employeeRepo.existsById(employeeId)) {
+            employeeRepo.deleteById(employeeId);
         } else {
-            throw new RuntimeException("User not found with ID: " + userId);
+            throw new RuntimeException("User not found with ID: " + employeeId);
+        }
+    }
+
+    public Employee updateEmployee(int employeeId, Employee updatedEmployee) {
+        Optional<Employee> existingEmployee = employeeRepo.findById(employeeId);
+        if (existingEmployee.isPresent()) {
+            Employee employee = existingEmployee.get();
+            employee.setFirstName(updatedEmployee.getFirstName());
+            employee.setLastName(updatedEmployee.getLastLame());
+            employee.setEmail(updatedEmployee.getEmail());
+            employee.setDepartment(updatedEmployee.getDepartment());
+            employee.setSalary(updatedEmployee.getSalary());
+            return employeeRepo.save(employee); // save() updates the entity
+        } else {
+            throw new RuntimeException("User not found with ID: " + employeeId);
         }
     }
 
