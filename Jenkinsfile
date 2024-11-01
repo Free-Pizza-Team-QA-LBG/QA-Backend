@@ -1,37 +1,39 @@
 pipeline {
     agent any
     
+    tools {
+        maven 'Maven 3.8.6' // Make sure to define your Maven version here or in Jenkins tool config
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'BuildingTest...'
-                // Add build steps here
+                // Run the Maven build
+                sh 'mvn clean compile'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Testing...'
-                // Add test steps here
+                // Run Maven tests
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                // Package the application (optional)
+                sh 'mvn package'
             }
         }
     }
-    
+
     post {
         success {
-            updateGitHubStatus("success", "All tests passed!")
+            echo 'Build and tests succeeded!'
         }
         failure {
-            updateGitHubStatus("failure", "Tests failed.")
+            echo 'Build or tests failed.'
         }
     }
-}
-
-def updateGitHubStatus(String status, String description) {
-    githubCheck(  // githubCheck step provided by GitHub Checks Plugin
-        name: 'Jenkins Build',
-        detailsURL: "${env.BUILD_URL}",
-        conclusion: status,
-        title: 'Build Status',
-        summary: description
-    )
 }
