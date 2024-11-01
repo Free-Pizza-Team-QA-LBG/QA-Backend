@@ -1,37 +1,53 @@
 pipeline {
     agent any
     
+    tools {
+        maven 'Maven 3.8.6' // Make sure to define your Maven version here or in Jenkins tool config
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'BuildingTest...'
-                // Add build steps here
+                echo 'Starting build...'
+                // Run the Maven build
+                sh 'mvn clean compile'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Testing...'
-                // Add test steps here
+                echo 'Running tests...'
+                // Run Maven tests
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Packaging application...'
+                // Package the application
+                sh 'mvn package'
             }
         }
     }
-    
+
     post {
         success {
-            updateGitHubStatus("success", "All tests passed!")
+            publishGitHubCheck('success', 'All stages completed successfully')
         }
         failure {
-            updateGitHubStatus("failure", "Tests failed.")
+            publishGitHubCheck('failure', 'One or more stages failed')
         }
     }
 }
 
-def updateGitHubStatus(String status, String description) {
-    githubCheck(  // githubCheck step provided by GitHub Checks Plugin
-        name: 'Jenkins Build',
-        detailsURL: "${env.BUILD_URL}",
-        conclusion: status,
-        title: 'Build Status',
-        summary: description
+// Helper function to publish GitHub Checks
+def publishGitHubCheck(String status, String description) {
+    githubCheck(
+        name: 'Jenkins Build',        // Name of the GitHub check
+        detailsURL: "${env.BUILD_URL}", // Link back to the Jenkins build
+        conclusion: status,           // Either 'success', 'failure', or 'neutral'
+        title: 'Build and Test Status',
+        summary: description          // Description of the check result
     )
 }
