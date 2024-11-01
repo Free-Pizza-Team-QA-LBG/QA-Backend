@@ -2,6 +2,7 @@ package com.pizza.entities;
 
 import jakarta.persistence.*;
 import org.checkerframework.common.aliasing.qual.Unique;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
@@ -53,16 +54,41 @@ public class Employee {
         return salary;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject employeeJson = new JSONObject();
+        employeeJson.put("id", getId());
+        employeeJson.put("firstName", getFirstName());
+        employeeJson.put("lastName", getLastLame());
+        employeeJson.put("email", getEmail());
+        employeeJson.put("department", getDepartment());
+        employeeJson.put("salary", getSalary());
+
+        return employeeJson;
+    }
+
     @Override
     public String toString() {
-        return String.format("{" +
-                "'id':%d," +
-                "'first_name':'%s'," +
-                "'last_name':'%s'," +
-                "'email':'%s'," +
-                "'department':'%s'," +
-                "'salary':%.2f" +
-                "}",
-                id, firstName, lastName, email, department, salary);
+        return toJSON().toString();
     }
 }
+*/
