@@ -37,7 +37,7 @@ class EmployeeController {
     }
 
     // Response: JSON Object containing success (boolean) and data (JSON Object)
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addEmployee(@RequestBody Employee employee) {
         Employee createdEmployee = employeeService.addEmployee(employee);
 
