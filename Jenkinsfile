@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo 'Starting build...'
                 // Run the Maven build
                 sh 'mvn clean compile'
             }
@@ -15,6 +16,7 @@ pipeline {
 
         stage('Test') {
             steps {
+                echo 'Running tests...'
                 // Run Maven tests
                 sh 'mvn test'
             }
@@ -22,7 +24,8 @@ pipeline {
 
         stage('Package') {
             steps {
-                // Package the application (optional)
+                echo 'Packaging application...'
+                // Package the application
                 sh 'mvn package'
             }
         }
@@ -30,10 +33,21 @@ pipeline {
 
     post {
         success {
-            echo 'Build and tests succeeded!'
+            publishGitHubCheck('success', 'All stages completed successfully')
         }
         failure {
-            echo 'Build or tests failed.'
+            publishGitHubCheck('failure', 'One or more stages failed')
         }
     }
+}
+
+// Helper function to publish GitHub Checks
+def publishGitHubCheck(String status, String description) {
+    githubCheck(
+        name: 'Jenkins Build',        // Name of the GitHub check
+        detailsURL: "${env.BUILD_URL}", // Link back to the Jenkins build
+        conclusion: status,           // Either 'success', 'failure', or 'neutral'
+        title: 'Build and Test Status',
+        summary: description          // Description of the check result
+    )
 }
