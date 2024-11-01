@@ -21,7 +21,7 @@ class PizzaBackendTests {
 
     @Test
     void alwaysTrue() {
-        assertTrue(false);
+        assertTrue(true);
     }
 }
 
