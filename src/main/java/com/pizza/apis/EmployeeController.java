@@ -4,9 +4,11 @@ package com.pizza.apis;
 import com.pizza.entities.Employee;
 import com.pizza.services.EmployeeService;
 import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,56 +21,67 @@ class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/{id}")
-    public String greetEmployee(@PathVariable int id) {
-        System.out.printf("SOMETHING HAPPENED to %d\n", id);
-        return "Hello Employee " + id;
-    }
-
-    @GetMapping("/all")
+    // Response: JSON Object containing data (JSON Object)
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getAllEmployees() {
-        return new ResponseEntity<>(
-                employeeService.getEmployees()
-                ,
-                HttpStatus.OK);
+        JSONObject jsonResponse = new JSONObject();
+
+        JSONArray employeesArray = new JSONArray();
+        employeeService.getEmployees().forEach(employee -> employeesArray.put(employee.toJSON()));
+        jsonResponse.put("data", employeesArray);
+
+        return ResponseEntity.ok(jsonResponse.toString());
     }
 
-    @PostMapping("")
-    public String test(@RequestBody String s) {
-
-        //System.out.println("Flipping request");
-        JSONObject body = new JSONObject(s);
-        //System.out.println(body);
-        //System.out.println("Dough balled.");
-
-        return body.toString();
-
-    }
-
-    @PostMapping("/add")
+    // Response: JSON Object containing success (boolean) and data (JSON Object)
+    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addEmployee(@RequestBody Employee employee) {
         Employee createdEmployee = employeeService.addEmployee(employee);
-        return ResponseEntity.ok("Added emplopyee");
+
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("success", true);
+        jsonResponse.put("data", createdEmployee.toJSON());
+
+        return ResponseEntity.ok(jsonResponse.toString());
     }
 
-    @PutMapping("/{id}")
+    // Response: JSON Object containing success (boolean) and data (JSON Object) if success=true or error (text) if success = false
+    @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateEmployee(@PathVariable int id, @RequestBody Employee updatedUser) {
         try {
             Employee user = employeeService.updateEmployee(id, updatedUser);
-            return ResponseEntity.ok("User updated");
+
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("success", true);
+            jsonResponse.put("data", user.toJSON());
+
+            return ResponseEntity.ok(jsonResponse.toString());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(null);
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("success", false);
+            jsonResponse.put("error", e.getMessage());
+
+            return ResponseEntity.status(404).body(jsonResponse.toString());
         }
     }
 
-    @DeleteMapping("/{id}")
+    // Response: JSON Object containing success (boolean) and message (text)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> delete(@PathVariable int id) {
         try {
             employeeService.deleteUserById(id);
-            return new ResponseEntity<>("Employee deleted",
-                    HttpStatus.OK);
+
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("success", true);
+            jsonResponse.put("message", "Employee deleted successfully.");
+
+            return ResponseEntity.ok(jsonResponse.toString());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("success", false);
+            jsonResponse.put("error", e.getMessage());
+
+            return ResponseEntity.status(404).body(jsonResponse.toString());
         }
     }
 
