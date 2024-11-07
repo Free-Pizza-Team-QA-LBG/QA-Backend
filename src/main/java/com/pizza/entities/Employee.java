@@ -30,6 +30,18 @@ public class Employee {
 
     private BigDecimal salary;
 
+    @JoinColumn(name = "role_id")
+    @ManyToOne
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role roleID) {
+        this.role = roleID;
+    }
+
     public int getId() {
         return id;
     }
@@ -38,7 +50,7 @@ public class Employee {
         return firstName;
     }
 
-    public String getLastLame() {
+    public String getLastName() {
         return lastName;
     }
 
@@ -71,6 +83,7 @@ public class Employee {
     }
 
     public void setSalary(BigDecimal salary) {
+        // TODO check if between min and max salary of role
         this.salary = salary;
     }
 
@@ -78,10 +91,11 @@ public class Employee {
         JSONObject employeeJson = new JSONObject();
         employeeJson.put("id", getId());
         employeeJson.put("firstName", getFirstName());
-        employeeJson.put("lastName", getLastLame());
+        employeeJson.put("lastName", getLastName());
         employeeJson.put("email", getEmail());
         employeeJson.put("department", getDepartment());
         employeeJson.put("salary", getSalary());
+        employeeJson.put("roleID", role.getId());
 
         return employeeJson;
     }
