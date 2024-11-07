@@ -20,7 +20,7 @@ import java.util.random.RandomGenerator;
 @RequestMapping("/api/v1/heartbeat")
 public class HeartBeatController {
 
-//    private final RandomGenerator GENERATOR = new Random();
+    private final RandomGenerator GENERATOR = new Random();
     private final String[] HEARTBEAT_RESPONSES = new String[]{
             "{\"crust\": \"stuffed\"}",
             "{\"dough\": \"balled\"}",
@@ -37,8 +37,7 @@ public class HeartBeatController {
     public ResponseEntity<String> heartBeat() {
 
         return new ResponseEntity<>(
-//                HEARTBEAT_RESPONSES[GENERATOR.nextInt(HEARTBEAT_RESPONSES.length)],
-                HEARTBEAT_RESPONSES[0],
+                HEARTBEAT_RESPONSES[GENERATOR.nextInt(HEARTBEAT_RESPONSES.length)],
                 HttpStatus.OK);
 
     }
