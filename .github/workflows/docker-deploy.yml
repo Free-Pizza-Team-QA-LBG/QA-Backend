@@ -58,3 +58,19 @@ jobs:
         run: |
           docker push freepizza2024/qa-backend:latest
           docker push freepizza2024/qa-backend:${{ env.TIMESTAMP }}
+
+      # Authenticate to Google Cloud
+      - name: Set up Google Cloud credentials
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_VM_KEY }}  # GCP service account key
+
+      - name: Deploy to GCP VM
+        run: |
+          gcloud compute ssh my-gcp-vm --project my-project --zone us-central1-a --command "
+            # Stop the existing container if it's running
+            docker ps -q --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r docker stop && \
+            docker rm $(docker ps -aq --filter 'ancestor=freepizza2024/qa-backend:latest') && \
+            # Pull the latest image and run the new container
+            docker pull freepizza2024/qa-backend:latest && \
+            docker run -d -p 8080:8080 freepizza2024/qa-backend:latest"
