@@ -21,8 +21,23 @@ public class ManagerService {
     public List<Manager> getByManagerId(int id) {
         List<Manager> out = new ArrayList<>();
 
-        if (managerRepo.findById(id).isPresent())
-            out.add(managerRepo.findById(id).get());
+        for (Manager manager : managerRepo.findAll()) {
+            if (manager.getId().getManager().getId() == id) {
+                out.add(manager);
+            }
+        }
+
+        return out;
+    }
+
+    public List<Manager> getByEmployeeId(int id) {
+        List<Manager> out = new ArrayList<>();
+
+        for (Manager manager : managerRepo.findAll()) {
+            if (manager.getId().getEmployee().getId() == id) {
+                out.add(manager);
+            }
+        }
 
         return out;
     }
