@@ -59,10 +59,18 @@ jobs:
           docker push freepizza2024/qa-backend:${{ env.TIMESTAMP }}
 
       # Authenticate to Google Cloud
-      - name: Set up Google Cloud credentials
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_VM_KEY }}  # GCP service account key
+#      - name: Set up Google Cloud credentials
+#        uses: google-github-actions/auth@v1
+#        with:
+#          credentials_json: ${{ secrets.GCP_VM_KEY }}  # GCP service account key
+
+      - name: Set up SSH key for GCP
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/google_compute_key
+          chmod 600 ~/.ssh/google_compute_key
+
+
 
       - name: Deploy to GCP VM
         run: |
