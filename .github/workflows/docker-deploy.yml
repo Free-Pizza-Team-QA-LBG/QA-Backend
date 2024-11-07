@@ -97,7 +97,7 @@ jobs:
             --command "
               # Stop any running container
               docker ps -q --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r docker stop && \
-              docker rm $(docker ps -aq --filter 'ancestor=freepizza2024/qa-backend:latest') && \
+              echo $(docker ps -aq --filter 'ancestor=freepizza2024/qa-backend:latest') && \
               # Pull the latest image and run a new container
               docker pull freepizza2024/qa-backend:latest && \
               docker run -d -p 8080:8080 freepizza2024/qa-backend:latest"
