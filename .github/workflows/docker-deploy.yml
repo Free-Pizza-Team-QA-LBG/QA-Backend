@@ -86,7 +86,7 @@ jobs:
       # Deploy to GCP VM
       - name: Deploy to GCP VM using SSH
         run: |
-          gcloud compute free-pizza-frontend \
+          gcloud compute ssh free-pizza-frontend \
             --project lbg-mea-grad-programme-c2 \
             --zone zone europe-west2-a \
             --ssh-key-file ~/.ssh/google_compute_key \
