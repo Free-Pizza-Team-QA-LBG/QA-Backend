@@ -50,11 +50,14 @@ jobs:
       # Build the Docker image and tag it
       - name: Build the Docker image
         run: |
+          TIMESTAMP=$(date +%s)
           docker build . --file Dockerfile --tag freepizza2024/qa-backend:latest
-          docker tag freepizza2024/qa-backend:latest freepizza2024/qa-backend:$(date +%s)
+          docker tag freepizza2024/qa-backend:latest freepizza2024/qa-backend:$TIMESTAMP
 
       # Push the Docker image to Docker Hub
       - name: Push the Docker image
         run: |
+          TIMESTAMP=$(date +%s)
           docker push freepizza2024/qa-backend:latest
-          docker push freepizza2024/qa-backend:$(date +%s)
+          docker push freepizza2024/qa-backend:$TIMESTAMP
+
