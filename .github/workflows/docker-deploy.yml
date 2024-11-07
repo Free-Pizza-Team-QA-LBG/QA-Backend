@@ -67,8 +67,8 @@ jobs:
       - name: Set up SSH key for GCP
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/google_compute_key
-          chmod 600 ~/.ssh/google_compute_key
+          echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/gradc2.delegate8
+          chmod 600 ~/.ssh/gradc2.delegate8
 
 
 
@@ -89,7 +89,7 @@ jobs:
           gcloud compute ssh free-pizza-frontend \
             --project lbg-mea-grad-programme-c2 \
             --zone europe-west2-a \
-            --ssh-key-file ~/.ssh/google_compute_key \
+            --ssh-key-file ~/.ssh/gradc2.delegate8 \
             --command "
               # Stop any running container
               docker ps -q --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r docker stop && \
