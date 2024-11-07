@@ -19,7 +19,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '11'  # specify the Java version
+          java-version: '17'  # specify the Java version
 
       - name: Cache Maven dependencies
         uses: actions/cache@v2
