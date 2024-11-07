@@ -2,8 +2,7 @@ name: Java CI with Maven and Docker Deployment
 
 on:
   push:
-    branches:
-      - main
+    branches: branches: [ "main", "patch-main" ]
 
 jobs:
   build-and-deploy:
