@@ -10,6 +10,14 @@ import java.math.BigDecimal;
 @Entity
 public class Role {
 
+    public final static Role DEFAULT_ROLE = new Role();
+    static {
+        DEFAULT_ROLE.setId(1);
+        DEFAULT_ROLE.setRoleName("Default");
+        DEFAULT_ROLE.setMaxSalary(new BigDecimal(10000000000L));
+        DEFAULT_ROLE.setMinSalary(new BigDecimal(0L));
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")
