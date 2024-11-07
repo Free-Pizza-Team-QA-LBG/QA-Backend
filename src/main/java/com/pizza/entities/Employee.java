@@ -32,7 +32,7 @@ public class Employee {
 
     @JoinColumn(name = "role_id")
     @ManyToOne
-    private Role role;
+    private Role role = Role.DEFAULT_ROLE;
 
     public Role getRole() {
         return role;
@@ -95,7 +95,7 @@ public class Employee {
         employeeJson.put("email", getEmail());
         employeeJson.put("department", getDepartment());
         employeeJson.put("salary", getSalary());
-        employeeJson.put("roleID", role.getId());
+        employeeJson.put("roleID", role == null ? null : role.getId());
 
         return employeeJson;
     }
