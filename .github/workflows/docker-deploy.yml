@@ -67,7 +67,7 @@ jobs:
 
       - name: Deploy to GCP VM
         run: |
-          gcloud compute ssh my-gcp-vm --project my-project --zone us-central1-a --command "
+          gcloud compute ssh free-pizza-frontend --project lbg-mea-grad-programme-c2 --zone europe-west2-a --command "
             # Stop the existing container if it's running
             docker ps -q --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r docker stop && \
             docker rm $(docker ps -aq --filter 'ancestor=freepizza2024/qa-backend:latest') && \
