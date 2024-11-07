@@ -69,6 +69,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/gradc2.delegate8
           chmod 600 ~/.ssh/gradc2.delegate8
+          echo "${{ secrets.GCP_VM_KEY_PUB }}" > ~/.ssh/gradc2.delegate8.pub
 
 #
 
