@@ -70,7 +70,7 @@ jobs:
           echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/gradc2.delegate8
           chmod 600 ~/.ssh/gradc2.delegate8
 
-
+#
 
 #      - name: Deploy to GCP VM
 #        run: |
