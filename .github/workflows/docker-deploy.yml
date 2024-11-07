@@ -3,14 +3,17 @@ name: Java CI with Maven and Docker Deployment
 on:
   push:
     branches:
-      - main  # or your branch of choice
+      - main
   pull_request:
     branches:
-      - main  # or your branch of choice
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      TIMESTAMP: ${{ github.run_id }}  # Use a fixed timestamp or unique identifier
 
     steps:
       - name: Checkout code
@@ -20,8 +23,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17'  # specify the Java version
-          distribution: 'temurin'  # specify the JDK distribution
+          java-version: '17'
+          distribution: 'temurin'
 
       # Cache Maven dependencies to speed up builds
       - name: Cache Maven dependencies
@@ -50,14 +53,11 @@ jobs:
       # Build the Docker image and tag it
       - name: Build the Docker image
         run: |
-          TIMESTAMP=$(date +%s)
           docker build . --file Dockerfile --tag freepizza2024/qa-backend:latest
-          docker tag freepizza2024/qa-backend:latest freepizza2024/qa-backend:$TIMESTAMP
+          docker tag freepizza2024/qa-backend:latest freepizza2024/qa-backend:${{ env.TIMESTAMP }}
 
       # Push the Docker image to Docker Hub
       - name: Push the Docker image
         run: |
-          TIMESTAMP=$(date +%s)
           docker push freepizza2024/qa-backend:latest
-          docker push freepizza2024/qa-backend:$TIMESTAMP
-
+          docker push freepizza2024/qa-backend:${{ env.TIMESTAMP }}
