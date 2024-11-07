@@ -64,11 +64,11 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_JSON }}  # GCP service account key
 
-#      - name: Set up SSH key for GCP
-#        run: |
-#          mkdir -p ~/.ssh
-#          echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/google_compute_key
-#          chmod 600 ~/.ssh/google_compute_key
+      - name: Set up SSH key for GCP
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/google_compute_key
+          chmod 600 ~/.ssh/google_compute_key
 
 
 
