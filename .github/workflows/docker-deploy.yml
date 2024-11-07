@@ -82,7 +82,7 @@ jobs:
             # Pull the latest image and run the new container
 #            docker pull freepizza2024/qa-backend:latest && \
 #            docker run -d -p 8080:8080 freepizza2024/qa-backend:latest"
-
+# test
 
       # Deploy to GCP VM
       - name: Deploy to GCP VM using SSH
