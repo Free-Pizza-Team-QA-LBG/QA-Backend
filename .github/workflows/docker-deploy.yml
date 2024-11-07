@@ -44,8 +44,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.freepizza }}
-          password: ${{ secrets.dckr_pat_0RpcclFjkRlMAaQnSWPt7gdVXfo }}
+          username: ${{ secrets.freepizza2024 }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Build the Docker image and tag it
       - name: Build the Docker image
