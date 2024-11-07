@@ -33,7 +33,7 @@ public class EmployeeService {
         if (existingEmployee.isPresent()) {
             Employee employee = existingEmployee.get();
             employee.setFirstName(updatedEmployee.getFirstName());
-            employee.setLastName(updatedEmployee.getLastLame());
+            employee.setLastName(updatedEmployee.getLastName());
             employee.setEmail(updatedEmployee.getEmail());
             employee.setDepartment(updatedEmployee.getDepartment());
             employee.setSalary(updatedEmployee.getSalary());
