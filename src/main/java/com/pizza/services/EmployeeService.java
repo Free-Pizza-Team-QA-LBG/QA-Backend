@@ -56,7 +56,7 @@ public class EmployeeService {
                         validated.setSalary(employee.getSalary()) &&
                         validated.setRole(employee.getRole())
                 )
-        ) {}
+        ) throw new RuntimeException("Employee validation failed: One or more fields contains an illegal value");
 
 
         return employeeRepo.save(employee);
