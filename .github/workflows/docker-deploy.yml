@@ -1,0 +1,104 @@
+name: Java CI with Maven and Docker Deployment
+#aa
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      TIMESTAMP: ${{ github.run_id }}  # Use a fixed timestamp or unique identifier
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Java environment
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Cache Maven dependencies to speed up builds
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Build the JAR file with Maven
+      - name: Build with Maven
+        run: mvn clean install
+
+      # Run tests
+      - name: Run tests
+        run: mvn test
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build the Docker image and tag it
+      - name: Build the Docker image
+        run: |
+          docker build . --file Dockerfile --tag freepizza2024/qa-backend:latest
+          docker tag freepizza2024/qa-backend:latest freepizza2024/qa-backend:${{ env.TIMESTAMP }}
+
+      # Push the Docker image to Docker Hub
+      - name: Push the Docker image
+        run: |
+          docker push freepizza2024/qa-backend:latest
+          docker push freepizza2024/qa-backend:${{ env.TIMESTAMP }}
+
+      # Authenticate to Google Cloud
+      - name: Set up Google Cloud credentials
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_JSON }}  # GCP service account key
+
+      - name: Set up SSH key for GCP
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GCP_VM_KEY }}" > ~/.ssh/gradc2.delegate8
+          chmod 600 ~/.ssh/gradc2.delegate8
+          echo "${{ secrets.GCP_VM_KEY_PUB }}" > ~/.ssh/gradc2.delegate8.pub
+
+#
+
+#      - name: Deploy to GCP VM
+#        run: |
+#          gcloud compute ssh free-pizza-frontend --project lbg-mea-grad-programme-c2 --zone europe-west2-a --command "
+            # Stop the existing container if it's running
+#            docker ps -q --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r docker stop && \
+#            docker rm $(docker ps -aq --filter 'ancestor=freepizza2024/qa-backend:latest') && \
+            # Pull the latest image and run the new container
+#            docker pull freepizza2024/qa-backend:latest && \
+#            docker run -d -p 8080:8080 freepizza2024/qa-backend:latest"
+# test
+#
+#
+#
+#
+
+      # Deploy to GCP VM
+      - name: Deploy to GCP VM using SSH
+        run: |
+          gcloud compute ssh free-pizza-frontend \
+            --project lbg-mea-grad-programme-c2 \
+            --zone europe-west2-a \
+            --ssh-key-file ~/.ssh/gradc2.delegate8 \
+            --command "
+              # Stop any running container
+              sudo docker ps -q --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r sudo docker stop && \
+              sudo docker ps -aq --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r sudo docker rm && \
+              # Pull the latest image and run a new container
+              sudo docker pull freepizza2024/qa-backend:latest && \
+              sudo docker run --env-file /lib/free-pizza/env.list -d -p 8080:8080 freepizza2024/qa-backend:latest"
