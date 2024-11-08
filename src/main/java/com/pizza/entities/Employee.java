@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Table(name = "employees")
 @Entity
-public class Employee {
+public class Employee implements Comparable<Employee> {
 
     @Id
     @GeneratedValue
@@ -35,6 +35,10 @@ public class Employee {
     private Role role = Role.DEFAULT_ROLE;
 
     public Role getRole() {
+
+        if (role == null)
+            role = Role.DEFAULT_ROLE;
+
         return role;
     }
 
@@ -82,9 +86,13 @@ public class Employee {
         this.department = department;
     }
 
-    public void setSalary(BigDecimal salary) {
-        // TODO check if between min and max salary of role
+    public boolean setSalary(BigDecimal salary) {
+
+        if (salary.compareTo(getRole().getMinSalary()) < 0) return false;
+        if (salary.compareTo(getRole().getMaxSalary()) > 0) return false;
+
         this.salary = salary;
+        return true;
     }
 
     public JSONObject toJSON() {
@@ -95,7 +103,7 @@ public class Employee {
         employeeJson.put("email", getEmail());
         employeeJson.put("department", getDepartment());
         employeeJson.put("salary", getSalary());
-        employeeJson.put("roleID", role == null ? null : role.getId());
+        employeeJson.put("roleID", getRole().getId());
 
         return employeeJson;
     }
@@ -103,5 +111,11 @@ public class Employee {
     @Override
     public String toString() {
         return toJSON().toString();
+    }
+
+
+    @Override
+    public int compareTo(Employee o) {
+        return Integer.compare(getId(), o.getId());
     }
 }
