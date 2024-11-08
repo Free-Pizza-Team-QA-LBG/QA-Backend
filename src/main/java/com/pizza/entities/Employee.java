@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Table(name = "employees")
 @Entity
-public class Employee {
+public class Employee implements Comparable<Employee> {
 
     @Id
     @GeneratedValue
@@ -34,13 +34,6 @@ public class Employee {
     @ManyToOne
     private Role role = Role.DEFAULT_ROLE;
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role roleID) {
-        this.role = roleID;
-    }
 
     public int getId() {
         return id;
@@ -66,25 +59,47 @@ public class Employee {
         return salary;
     }
 
-    public void setFirstName(String firstName) {
+    public Role getRole() {
+
+        if (role == null)
+            role = Role.DEFAULT_ROLE;
+
+        return role;
+    }
+
+
+    public boolean setFirstName(String firstName) {
         this.firstName = firstName;
+        return true;
     }
 
-    public void setLastName(String lastName) {
+    public boolean setLastName(String lastName) {
         this.lastName = lastName;
+        return true;
     }
 
-    public void setEmail(String email) {
+    public boolean setEmail(String email) {
         this.email = email;
+        return true;
     }
 
-    public void setDepartment(String department) {
+    public boolean setDepartment(String department) {
         this.department = department;
+        return true;
     }
 
-    public void setSalary(BigDecimal salary) {
-        // TODO check if between min and max salary of role
+    public boolean setSalary(BigDecimal salary) {
+
+        if (salary.compareTo(getRole().getMinSalary()) < 0) return false;
+        if (salary.compareTo(getRole().getMaxSalary()) > 0) return false;
+
         this.salary = salary;
+        return true;
+    }
+
+    public boolean setRole(Role roleID) {
+        this.role = roleID;
+        return true;
     }
 
     public JSONObject toJSON() {
@@ -95,7 +110,7 @@ public class Employee {
         employeeJson.put("email", getEmail());
         employeeJson.put("department", getDepartment());
         employeeJson.put("salary", getSalary());
-        employeeJson.put("roleID", role == null ? null : role.getId());
+        employeeJson.put("roleID", getRole().getId());
 
         return employeeJson;
     }
@@ -103,5 +118,11 @@ public class Employee {
     @Override
     public String toString() {
         return toJSON().toString();
+    }
+
+
+    @Override
+    public int compareTo(Employee o) {
+        return Integer.compare(getId(), o.getId());
     }
 }

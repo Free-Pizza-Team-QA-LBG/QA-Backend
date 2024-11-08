@@ -32,11 +32,13 @@ public class EmployeeService {
         Optional<Employee> existingEmployee = employeeRepo.findById(employeeId);
         if (existingEmployee.isPresent()) {
             Employee employee = existingEmployee.get();
-            employee.setFirstName(updatedEmployee.getFirstName());
-            employee.setLastName(updatedEmployee.getLastName());
-            employee.setEmail(updatedEmployee.getEmail());
-            employee.setDepartment(updatedEmployee.getDepartment());
-            employee.setSalary(updatedEmployee.getSalary());
+            if (!(
+                    employee.setFirstName(updatedEmployee.getFirstName()) &&
+                            employee.setLastName(updatedEmployee.getLastName()) &&
+                            employee.setEmail(updatedEmployee.getEmail()) &&
+                            employee.setDepartment(updatedEmployee.getDepartment()) &&
+                            employee.setSalary(updatedEmployee.getSalary())
+            )) throw new RuntimeException("Employee validation failed: One or more fields contains an illegal value");
             return employeeRepo.save(employee);
         } else {
             throw new RuntimeException("User not found with ID: " + employeeId);
@@ -44,6 +46,21 @@ public class EmployeeService {
     }
 
     public Employee addEmployee(Employee employee) {
+
+        // Validation
+        Employee validated = new Employee();
+        if (
+                !(
+                        validated.setFirstName(employee.getFirstName()) &&
+                                validated.setLastName(employee.getLastName()) &&
+                                validated.setEmail(employee.getEmail()) &&
+                                validated.setDepartment(employee.getDepartment()) &&
+                                validated.setSalary(employee.getSalary()) &&
+                                validated.setRole(employee.getRole())
+                )
+        ) throw new RuntimeException("Employee validation failed: One or more fields contains an illegal value");
+
+
         return employeeRepo.save(employee);
     }
 
