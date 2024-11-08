@@ -36,6 +36,24 @@ class EmployeeController {
         return ResponseEntity.ok(jsonResponse.toString());
     }
 
+    // Response: JSON Object containing data (JSON Object)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getEmployee(@PathVariable int id) {
+        try {
+            Employee user = employeeService.getEmployee(id);
+
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("data", user.toJSON());
+
+            return ResponseEntity.ok(jsonResponse.toString());
+        } catch (RuntimeException e) {
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("error", e.getMessage());
+
+            return ResponseEntity.status(404).body(jsonResponse.toString());
+        }
+    }
+
     // Response: JSON Object containing success (boolean) and data (JSON Object)
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addEmployee(@RequestBody Employee employee) {
