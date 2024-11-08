@@ -44,6 +44,21 @@ public class EmployeeService {
     }
 
     public Employee addEmployee(Employee employee) {
+
+        // Validation
+        Employee validated = new Employee();
+        if (
+                !(
+                        validated.setFirstName(employee.getFirstName()) &&
+                        validated.setLastName(employee.getLastName()) &&
+                        validated.setEmail(employee.getEmail()) &&
+                        validated.setDepartment(employee.getDepartment()) &&
+                        validated.setSalary(employee.getSalary()) &&
+                        validated.setRole(employee.getRole())
+                )
+        ) {}
+
+
         return employeeRepo.save(employee);
     }
 
