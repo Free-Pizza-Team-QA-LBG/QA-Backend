@@ -101,4 +101,4 @@ jobs:
               sudo docker ps -aq --filter 'ancestor=freepizza2024/qa-backend:latest' | xargs -r sudo docker rm && \
               # Pull the latest image and run a new container
               sudo docker pull freepizza2024/qa-backend:latest && \
-              sudo docker run -d -p 8080:8080 freepizza2024/qa-backend:latest"
+              sudo docker run --env-file /lib/free-pizza/env.list -d -p 8080:8080 freepizza2024/qa-backend:latest"
