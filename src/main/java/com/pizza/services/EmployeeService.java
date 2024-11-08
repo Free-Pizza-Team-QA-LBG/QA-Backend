@@ -20,6 +20,15 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
+    public Employee getEmployee(int employeeId) {
+        Optional<Employee> employee = employeeRepo.findById(employeeId);
+        if (employee.isPresent()) {
+            return employee.get();
+        } else {
+            throw new RuntimeException("User not found with ID: " + employeeId);
+        }
+    }
+
     public void deleteUserById(int employeeId) {
         if (employeeRepo.existsById(employeeId)) {
             employeeRepo.deleteById(employeeId);
