@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Entity
 public class Role {
 
+    @Transient
     public final static Role DEFAULT_ROLE = new Role();
     static {
         DEFAULT_ROLE.setId(1);
@@ -32,6 +33,10 @@ public class Role {
 
     @Column(name = "max_salary")
     private BigDecimal maxSalary;
+
+    public Role getDEFAULT_ROLE() {
+        return DEFAULT_ROLE;
+    }
 
     public int getId() {
         return id;
